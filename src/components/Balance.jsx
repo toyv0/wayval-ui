@@ -18,36 +18,44 @@ const styles = {
   },
 };
 
-function Balance(props) {
-  const { Moralis } = useMoralis();
+function Balance() {
+  const { Moralis, account } = useMoralis();
+  const { data: tokenData } = useERC20Balances();
+  const { data: nftData } = useNFTBalances();
+  const { data: balanceData } = useNativeBalance();
+  let wave;
 
-  const { data: assets } = useERC20Balances();
-  const { data: nfts } = useNFTBalances();
-  const { data: balance } = useNativeBalance();
-  const loading = !nfts | !assets | !balance;
+  if (balanceData.balance && nftData && tokenData) {
+    const splitFormatted = balanceData.formatted.split(" ");
 
-  if (!loading) {
-    console.log("assets: ", assets);
-    console.log("balance: ", balance);
-    console.log("nfts: ", nfts);
-  }
-
-  if (assets) {
-    const coins = assets.map((asset) => ({
+    const tokenInfo = tokenData.map((asset) => ({
       symbol: asset.symbol,
-      balance: Moralis?.Units?.FromWei(asset.balance, asset.decimals),
+      balance: parseFloat(
+        Moralis?.Units?.FromWei(asset.balance, asset.decimals),
+      ).toFixed(6),
       address: asset.token_address,
     }));
-    console.log("coins", coins);
+    const nftInfo = nftData.result.map((nft) => ({
+      name: nft.name,
+      id: nft.token_id,
+      address: nft.token_address,
+    }));
+    const balanceInfo = {
+      balance: splitFormatted[0],
+      symbol: splitFormatted[1],
+    };
+
+    wave = {
+      tokens: tokenInfo,
+      nfts: nftInfo,
+      nativeBalance: balanceInfo,
+      account: account,
+      signature: "",
+    };
   }
-  // if (nfts) {
-  //   const collection = nfts.map((nft) => ({
-  //     name: nft.name,
-  //     id: nft.token_id,
-  //     address: nft.token_address,
-  //   }));
-  //   console.log("collection", collection);
-  // }
+
+  const loading = !wave;
+  if (!loading) console.log("WAVE: ", wave);
 
   return (
     <Card style={styles.card}>
