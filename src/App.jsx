@@ -1,13 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Account from "components/Account/Account";
 import Chains from "components/Chains";
-import { Layout } from "antd";
+import { Layout, Button } from "antd";
 import "antd/dist/antd.css";
 import "./style.css";
 import logo from "./images/wve.jpg";
-import Balance from "components/Balance";
+import Wave from "components/Wave";
 const { Header } = Layout;
 
 const styles = {
@@ -48,6 +47,7 @@ const styles = {
 const App = () => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
     useMoralis();
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
@@ -69,14 +69,12 @@ const App = () => {
       <div style={styles.content}>
         {isAuthenticated === true ? (
           <div>
-            <Balance />
+            <Wave />
           </div>
         ) : (
           <div>connect wallet first</div>
         )}
       </div>
-
-      <div style={styles.content}></div>
     </Layout>
   );
 };

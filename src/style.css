@@ -18,3 +18,7 @@
   overflow: auto;
   border-radius: 1rem;
 } */
+
+input::placeholder {
+  color: #334766;
+}
