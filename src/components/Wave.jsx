@@ -92,6 +92,7 @@ function Wave() {
   }
 
   if (nftData?.result) {
+    console.log(nftData);
     nftInfo = nftData?.result?.map((nft) => ({
       name: nft.name,
       id: nft.token_id,

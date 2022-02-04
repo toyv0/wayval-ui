@@ -47,7 +47,6 @@ const styles = {
 const App = () => {
   const { isWeb3Enabled, enableWeb3, isAuthenticated, isWeb3EnableLoading } =
     useMoralis();
-  const [input, setInput] = useState("");
 
   useEffect(() => {
     const connectorId = window.localStorage.getItem("connectorId");
