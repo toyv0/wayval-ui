@@ -4,7 +4,9 @@ import {
   useNFTBalances,
   useMoralis,
 } from "react-moralis";
+import { useState } from "react";
 import { Card } from "antd";
+import { render } from "@testing-library/react";
 
 const styles = {
   card: {
@@ -16,6 +18,9 @@ const styles = {
     fontWeight: "500",
     background: "#4A74A8",
   },
+  header: {
+    justifyContent: "center",
+  },
 };
 
 function Balance() {
@@ -23,43 +28,70 @@ function Balance() {
   const { data: tokenData } = useERC20Balances();
   const { data: nftData } = useNFTBalances();
   const { data: balanceData } = useNativeBalance();
-  let wave;
+  let [wave] = useState("");
+  let [tokenInfo] = useState([]);
+  let [nftInfo] = useState([]);
+  let [balanceInfo] = useState({});
 
-  if (balanceData.balance && nftData && tokenData) {
+  if (balanceData.balance) {
     const splitFormatted = balanceData.formatted.split(" ");
-
-    const tokenInfo = tokenData.map((asset) => ({
+    balanceInfo = {
+      balance: splitFormatted[0],
+      symbol: splitFormatted[1],
+    };
+  }
+  if (tokenData) {
+    tokenInfo = tokenData.map((asset) => ({
       symbol: asset.symbol,
       balance: parseFloat(
         Moralis?.Units?.FromWei(asset.balance, asset.decimals),
       ).toFixed(6),
       address: asset.token_address,
     }));
-    const nftInfo = nftData.result.map((nft) => ({
+  }
+
+  if (nftData?.result) {
+    console.log(nftData);
+    nftInfo = nftData?.result?.map((nft) => ({
       name: nft.name,
       id: nft.token_id,
       address: nft.token_address,
     }));
-    const balanceInfo = {
-      balance: splitFormatted[0],
-      symbol: splitFormatted[1],
-    };
-
-    wave = {
-      tokens: tokenInfo,
-      nfts: nftInfo,
-      nativeBalance: balanceInfo,
-      account: account,
-      signature: "",
-    };
   }
+
+  wave = {
+    tokens: tokenInfo,
+    nfts: nftInfo,
+    nativeBalance: balanceInfo,
+    account: account,
+    signature: "",
+  };
 
   const loading = !wave;
   if (!loading) console.log("WAVE: ", wave);
 
   return (
     <Card style={styles.card}>
-      <div>text here</div>
+      <header style={styles.header}>Address</header>
+      <div>{account}</div>
+      <header>Assets</header>
+      <div>
+        {balanceInfo.symbol} {balanceInfo.balance}
+      </div>
+      <div>
+        {tokenInfo?.map((token) => (
+          <div key={token.symbol}>
+            {token.symbol} {token.balance}
+          </div>
+        ))}
+      </div>
+      <div>
+        {nftInfo?.map((nft) => (
+          <div>
+            {nft.name} {nft.id}
+          </div>
+        ))}
+      </div>
     </Card>
   );
 }

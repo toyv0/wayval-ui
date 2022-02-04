@@ -58,25 +58,25 @@ const App = () => {
 
   return (
     <Layout style={styles.layout}>
-      <Router>
-        <Header style={styles.header}>
-          <Logo />
-          <div style={styles.headerRight}>
-            <Chains />
-            <Account />
-          </div>
-        </Header>
-
-        <div style={styles.content}>
-          <Switch>
-            <Route path="/">
-              <div>
-                <Balance />
-              </div>
-            </Route>
-          </Switch>
+      <Header style={styles.header}>
+        <Logo />
+        <div style={styles.headerRight}>
+          <Chains />
+          <Account />
         </div>
-      </Router>
+      </Header>
+
+      <div style={styles.content}>
+        {isAuthenticated === true ? (
+          <div>
+            <Balance />
+          </div>
+        ) : (
+          <div>connect wallet first</div>
+        )}
+      </div>
+
+      <div style={styles.content}></div>
     </Layout>
   );
 };
