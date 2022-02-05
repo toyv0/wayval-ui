@@ -1,13 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Account from "components/Account/Account";
 import Chains from "components/Chains";
-import { Layout } from "antd";
+import { Layout, Button } from "antd";
 import "antd/dist/antd.css";
 import "./style.css";
 import logo from "./images/wve.jpg";
-import Balance from "components/Balance";
+import MintWave from "components/MintWave";
 const { Header } = Layout;
 
 const styles = {
@@ -58,25 +57,23 @@ const App = () => {
 
   return (
     <Layout style={styles.layout}>
-      <Router>
-        <Header style={styles.header}>
-          <Logo />
-          <div style={styles.headerRight}>
-            <Chains />
-            <Account />
-          </div>
-        </Header>
-
-        <div style={styles.content}>
-          <Switch>
-            <Route path="/">
-              <div>
-                <Balance />
-              </div>
-            </Route>
-          </Switch>
+      <Header style={styles.header}>
+        <Logo />
+        <div style={styles.headerRight}>
+          <Chains />
+          <Account />
         </div>
-      </Router>
+      </Header>
+
+      <div style={styles.content}>
+        {isAuthenticated === true ? (
+          <div>
+            <MintWave />
+          </div>
+        ) : (
+          <div>connect wallet first</div>
+        )}
+      </div>
     </Layout>
   );
 };
