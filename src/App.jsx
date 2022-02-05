@@ -7,6 +7,14 @@ import "antd/dist/antd.css";
 import "./style.css";
 import logo from "./images/wve.jpg";
 import MintWave from "components/MintWave";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import DisplayWave from "components/DisplayWave";
+import MenuItems from "components/MenuItems";
 const { Header } = Layout;
 
 const styles = {
@@ -15,7 +23,7 @@ const styles = {
     justifyContent: "center",
     fontFamily: "Roboto, sans-serif",
     color: "#4A74A8",
-    marginTop: "130px",
+    marginTop: "60px",
     padding: "10px",
   },
   header: {
@@ -57,23 +65,40 @@ const App = () => {
 
   return (
     <Layout style={styles.layout}>
-      <Header style={styles.header}>
-        <Logo />
-        <div style={styles.headerRight}>
-          <Chains />
-          <Account />
-        </div>
-      </Header>
-
-      <div style={styles.content}>
-        {isAuthenticated === true ? (
-          <div>
-            <MintWave />
+      <Router>
+        <Header style={styles.header}>
+          <Logo />
+          <MenuItems />
+          <div style={styles.headerRight}>
+            <Chains />
+            <Account />
           </div>
-        ) : (
-          <div>connect wallet first</div>
-        )}
-      </div>
+        </Header>
+
+        <div style={styles.content}>
+          <Switch>
+            <Route path="/mint">
+              <div style={styles.content}>
+                {isAuthenticated === true ? (
+                  <div>
+                    <MintWave />
+                  </div>
+                ) : (
+                  <div>connect wallet first</div>
+                )}
+              </div>
+            </Route>
+            <Route path="/waves">
+              <div style={styles.content}>
+                <DisplayWave />
+              </div>
+            </Route>
+            <Route path="/">
+              <Redirect to="/mint" />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     </Layout>
   );
 };

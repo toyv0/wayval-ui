@@ -18,6 +18,7 @@ const styles = {
     fontSize: "16px",
     fontWeight: "500",
     background: "#4A74A8",
+    marginTop: "10px",
   },
   layout: {
     width: "450px",
@@ -76,6 +77,7 @@ function MintWave() {
   let [nftInfo] = useState([]);
   let [balanceInfo] = useState({});
   const [input, setInput] = useState("");
+  const waveContractAddress = process.env.REACT_APP_WAVE_CONTRACT;
 
   if (balanceData.balance) {
     const splitFormatted = balanceData.formatted.split(" ");
@@ -95,7 +97,6 @@ function MintWave() {
   }
 
   if (nftData?.result) {
-    console.log("NFT DATA: ", nftData);
     nftInfo = nftData?.result?.map((nft) => ({
       name: nft.name,
       id: nft.token_id,
@@ -120,7 +121,7 @@ function MintWave() {
         const signer = provider.getSigner();
         console.log(signer);
         const waveContract = new ethers.Contract(
-          "0x8742381E909eD53a76d72A07eA87847e58d1D837",
+          waveContractAddress,
           waveAbi.abi,
           signer,
         );
