@@ -6,7 +6,7 @@ import { Layout, Button } from "antd";
 import "antd/dist/antd.css";
 import "./style.css";
 import logo from "./images/wve.jpg";
-import Wave from "components/Wave";
+import MintWave from "components/MintWave";
 const { Header } = Layout;
 
 const styles = {
@@ -68,7 +68,7 @@ const App = () => {
       <div style={styles.content}>
         {isAuthenticated === true ? (
           <div>
-            <Wave />
+            <MintWave />
           </div>
         ) : (
           <div>connect wallet first</div>

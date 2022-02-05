@@ -4,8 +4,10 @@ import {
   useNFTBalances,
   useMoralis,
 } from "react-moralis";
+import { ethers } from "ethers";
 import { useState } from "react";
 import { Card, Layout, Button } from "antd";
+import waveAbi from "../abi/Wave.json";
 
 const styles = {
   card: {
@@ -63,12 +65,13 @@ const styles = {
   },
 };
 
-function Wave() {
+function MintWave() {
   const { Moralis, account } = useMoralis();
   const { data: tokenData } = useERC20Balances();
   const { data: nftData } = useNFTBalances();
   const { data: balanceData } = useNativeBalance();
   let [wave] = useState("");
+  let [minting] = useState(false);
   let [tokenInfo] = useState([]);
   let [nftInfo] = useState([]);
   let [balanceInfo] = useState({});
@@ -92,7 +95,7 @@ function Wave() {
   }
 
   if (nftData?.result) {
-    console.log(nftData);
+    console.log("NFT DATA: ", nftData);
     nftInfo = nftData?.result?.map((nft) => ({
       name: nft.name,
       id: nft.token_id,
@@ -104,9 +107,46 @@ function Wave() {
     tokens: tokenInfo,
     nfts: nftInfo,
     nativeBalance: balanceInfo,
-    account: account,
-    destination: input,
-    signature: "",
+    origin: account,
+  };
+
+  const askContractToMint = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        console.log("WAVE: ", wave);
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        console.log(signer);
+        const waveContract = new ethers.Contract(
+          "0x8742381E909eD53a76d72A07eA87847e58d1D837",
+          waveAbi.abi,
+          signer,
+        );
+
+        const waveData = Buffer.from(JSON.stringify(wave)).toString("base64");
+        console.log(`data:application/json;base64,${waveData}`);
+
+        let waveTxn = await waveContract.makeWave(
+          `data:application/json;base64,${waveData}`,
+          input,
+        );
+        minting = true;
+        console.log("wave minting: ", minting);
+        await waveTxn.wait();
+
+        minting = false;
+        console.log("wave minting: ", minting);
+        console.log(
+          `minted wave! see transaction: https://mumbai.polygonscan.com/tx/${waveTxn.hash}`,
+        );
+      } else {
+        console.log("ethereum object doesn't exist");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -146,9 +186,7 @@ function Wave() {
           size="large"
           type="primary"
           style={styles.button}
-          onClick={async () => {
-            await console.log("WAVE: ", wave);
-          }}
+          onClick={askContractToMint}
         >
           🌊 mint wave 🌊
         </Button>
@@ -156,4 +194,4 @@ function Wave() {
     </Layout>
   );
 }
-export default Wave;
+export default MintWave;
