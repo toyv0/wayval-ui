@@ -45,7 +45,7 @@ const styles = {
     color: "#212E42",
   },
   button: {
-    width: "555px",
+    width: "600px",
     marginTop: "5px",
     marginBottom: "20px",
     borderRadius: "0.5rem",
