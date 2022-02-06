@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import DisplayWave from "components/DisplayWave";
 import MenuItems from "components/MenuItems";
+import ManageWaves from "components/ManageWaves";
 const { Header } = Layout;
 
 const styles = {
@@ -91,6 +92,11 @@ const App = () => {
             <Route path="/waves">
               <div style={styles.content}>
                 <DisplayWave />
+              </div>
+            </Route>
+            <Route path="/manage">
+              <div style={styles.content}>
+                <ManageWaves />
               </div>
             </Route>
             <Route path="/">

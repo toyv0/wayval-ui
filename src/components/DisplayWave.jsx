@@ -1,7 +1,6 @@
-import { useNFTBalances, useMoralis } from "react-moralis";
-import { ethers } from "ethers";
+import { useNFTBalances } from "react-moralis";
 import { useState } from "react";
-import { Card, Layout, Button } from "antd";
+import { Card, Layout } from "antd";
 
 const styles = {
   card: {
@@ -13,6 +12,7 @@ const styles = {
     fontWeight: "500",
     background: "#4A74A8",
     marginTop: "10px",
+    textAlign: "center",
   },
   layout: {
     width: "450px",
@@ -62,14 +62,12 @@ const styles = {
 };
 
 function DisplayWave() {
-  const { Moralis, account } = useMoralis();
   const { data: nftData } = useNFTBalances();
-  let [burning] = useState(false);
   let [waves] = useState([]);
   const waveContractAddress = process.env.REACT_APP_WAVE_CONTRACT.toLowerCase();
 
   if (nftData?.result) {
-    console.log("NFT DATA: ", nftData);
+    // console.log("NFT DATA: ", nftData);
     waves = nftData?.result
       ?.filter((nft) => nft.token_address === waveContractAddress)
       .map((item) => ({
@@ -78,41 +76,7 @@ function DisplayWave() {
       }));
   }
 
-  console.log("WAVES ONLY: ", waves);
-
-  const askContractToBurn = async () => {
-    try {
-      const { ethereum } = window;
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        console.log(signer);
-        // const waveContract = new ethers.Contract(
-        //   "0x8742381E909eD53a76d72A07eA87847e58d1D837",
-        //   waveAbi.abi,
-        //   signer,
-        // );
-
-        // let waveTxn = await waveContract.burnWave(
-        //   // msg.signer
-        //   // waveId
-        // );
-
-        //await waveTxn.wait();
-
-        console.log(`burned wave!`);
-      } else {
-        console.log("ethereum object doesn't exist");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // return message for no waves
-
-  console.log(waves[0]?.account);
+  // TODO return message for no waves
 
   return (
     <Layout style={styles.layout}>
@@ -122,6 +86,7 @@ function DisplayWave() {
             <header style={styles.header}>
               🌊 wave {wave?.id} minted from 🌊 {wave?.origin}
             </header>
+            <header style={styles.header}>💎 hodlings 💎</header>
             <div>
               {wave?.nativeBalance?.symbol} {wave?.nativeBalance?.balance}
             </div>
@@ -140,16 +105,6 @@ function DisplayWave() {
               ))}
             </div>
           </Card>
-          <div style={styles.input}>
-            <Button
-              size="large"
-              type="primary"
-              style={styles.button}
-              onClick={null}
-            >
-              🔥 burn wave 🔥
-            </Button>
-          </div>
         </Layout>
       ))}
     </Layout>

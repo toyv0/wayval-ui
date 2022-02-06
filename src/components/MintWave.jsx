@@ -116,10 +116,8 @@ function MintWave() {
       const { ethereum } = window;
 
       if (ethereum) {
-        console.log("WAVE: ", wave);
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        console.log(signer);
         const waveContract = new ethers.Contract(
           waveContractAddress,
           waveAbi.abi,
@@ -127,12 +125,12 @@ function MintWave() {
         );
 
         const waveData = Buffer.from(JSON.stringify(wave)).toString("base64");
-        console.log(`data:application/json;base64,${waveData}`);
 
         let waveTxn = await waveContract.makeWave(
           `data:application/json;base64,${waveData}`,
           input,
         );
+
         minting = true;
         console.log("wave minting: ", minting);
         await waveTxn.wait();

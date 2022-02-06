@@ -10,7 +10,7 @@ function MenuItems() {
       display: "flex",
       fontSize: "17px",
       fontWeight: "500",
-      width: "25%",
+      width: "30%",
       justifyContent: "center",
       background: "#212E42",
       color: "#17202D",
@@ -28,6 +28,9 @@ function MenuItems() {
       </Menu.Item>
       <Menu.Item key="/waves">
         <NavLink to="/waves">🌊 waves</NavLink>
+      </Menu.Item>
+      <Menu.Item key="/manage">
+        <NavLink to="/manage">🏃 manage</NavLink>
       </Menu.Item>
     </Menu>
   );
