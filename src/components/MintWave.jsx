@@ -18,6 +18,7 @@ const styles = {
     fontSize: "16px",
     fontWeight: "500",
     background: "#4A74A8",
+    marginTop: "10px",
   },
   layout: {
     width: "450px",
@@ -71,11 +72,12 @@ function MintWave() {
   const { data: nftData } = useNFTBalances();
   const { data: balanceData } = useNativeBalance();
   let [wave] = useState("");
-  let [minting] = useState(false);
+  let [minting, setMinting] = useState(false);
   let [tokenInfo] = useState([]);
   let [nftInfo] = useState([]);
   let [balanceInfo] = useState({});
   const [input, setInput] = useState("");
+  const waveContractAddress = process.env.REACT_APP_WAVE_CONTRACT;
 
   if (balanceData.balance) {
     const splitFormatted = balanceData.formatted.split(" ");
@@ -95,7 +97,6 @@ function MintWave() {
   }
 
   if (nftData?.result) {
-    console.log("NFT DATA: ", nftData);
     nftInfo = nftData?.result?.map((nft) => ({
       name: nft.name,
       id: nft.token_id,
@@ -115,30 +116,27 @@ function MintWave() {
       const { ethereum } = window;
 
       if (ethereum) {
-        console.log("WAVE: ", wave);
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        console.log(signer);
         const waveContract = new ethers.Contract(
-          "0x8742381E909eD53a76d72A07eA87847e58d1D837",
+          waveContractAddress,
           waveAbi.abi,
           signer,
         );
 
         const waveData = Buffer.from(JSON.stringify(wave)).toString("base64");
-        console.log(`data:application/json;base64,${waveData}`);
 
         let waveTxn = await waveContract.makeWave(
           `data:application/json;base64,${waveData}`,
           input,
         );
-        minting = true;
-        console.log("wave minting: ", minting);
+
+        setMinting(true);
         await waveTxn.wait();
 
-        minting = false;
-        console.log("wave minting: ", minting);
-        console.log(
+        setMinting(false);
+
+        alert(
           `minted wave! see transaction: https://mumbai.polygonscan.com/tx/${waveTxn.hash}`,
         );
       } else {
@@ -182,14 +180,25 @@ function MintWave() {
         />
       </div>
       <div style={styles.input}>
-        <Button
-          size="large"
-          type="primary"
-          style={styles.button}
-          onClick={askContractToMint}
-        >
-          🌊 mint wave 🌊
-        </Button>
+        {minting === true ? (
+          <Button
+            size="large"
+            type="primary"
+            style={styles.button}
+            onClick={null}
+          >
+            minting wave 🌊🌊🌊
+          </Button>
+        ) : (
+          <Button
+            size="large"
+            type="primary"
+            style={styles.button}
+            onClick={askContractToMint}
+          >
+            🌊 mint wave 🌊
+          </Button>
+        )}
       </div>
     </Layout>
   );
