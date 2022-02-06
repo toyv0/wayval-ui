@@ -14,6 +14,8 @@ function MenuItems() {
       justifyContent: "center",
       background: "#212E42",
       color: "#17202D",
+      borderBottom: "0px",
+      paddingLeft: "210px",
     },
   };
 

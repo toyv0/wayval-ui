@@ -72,7 +72,7 @@ function MintWave() {
   const { data: nftData } = useNFTBalances();
   const { data: balanceData } = useNativeBalance();
   let [wave] = useState("");
-  let [minting] = useState(false);
+  let [minting, setMinting] = useState(false);
   let [tokenInfo] = useState([]);
   let [nftInfo] = useState([]);
   let [balanceInfo] = useState({});
@@ -131,13 +131,12 @@ function MintWave() {
           input,
         );
 
-        minting = true;
-        console.log("wave minting: ", minting);
+        setMinting(true);
         await waveTxn.wait();
 
-        minting = false;
-        console.log("wave minting: ", minting);
-        console.log(
+        setMinting(false);
+
+        alert(
           `minted wave! see transaction: https://mumbai.polygonscan.com/tx/${waveTxn.hash}`,
         );
       } else {
@@ -181,14 +180,25 @@ function MintWave() {
         />
       </div>
       <div style={styles.input}>
-        <Button
-          size="large"
-          type="primary"
-          style={styles.button}
-          onClick={askContractToMint}
-        >
-          🌊 mint wave 🌊
-        </Button>
+        {minting === true ? (
+          <Button
+            size="large"
+            type="primary"
+            style={styles.button}
+            onClick={null}
+          >
+            minting wave 🌊🌊🌊
+          </Button>
+        ) : (
+          <Button
+            size="large"
+            type="primary"
+            style={styles.button}
+            onClick={askContractToMint}
+          >
+            🌊 mint wave 🌊
+          </Button>
+        )}
       </div>
     </Layout>
   );

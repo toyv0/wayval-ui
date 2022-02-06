@@ -45,7 +45,7 @@ const styles = {
     color: "#212E42",
   },
   button: {
-    width: "550px",
+    width: "555px",
     marginTop: "5px",
     marginBottom: "20px",
     borderRadius: "0.5rem",
@@ -64,7 +64,7 @@ const styles = {
 };
 
 function ManageWaves() {
-  let [isRecovering] = useState(false);
+  let [isRecovering, setRecovering] = useState(false);
   let [isLoading, setLoading] = useState(true);
   let [waves] = useState([]);
   const { account } = useMoralis();
@@ -130,15 +130,14 @@ function ManageWaves() {
 
         let waveTxn = await waveContract.recoverWave(tokenId);
 
-        isRecovering = true;
+        setRecovering(true);
         console.log(`recovering wave ${tokenId}: `, isRecovering);
 
         await waveTxn.wait();
 
-        isRecovering = false;
-        console.log(`recovered wave!`, tokenId);
-        console.log(
-          `see transaction: https://mumbai.polygonscan.com/tx/${waveTxn.hash}`,
+        setRecovering(false);
+        alert(
+          `recovered wave!: https://mumbai.polygonscan.com/tx/${waveTxn.hash}`,
         );
       } else {
         console.log("ethereum object doesn't exist");
@@ -158,7 +157,6 @@ function ManageWaves() {
   if (isLoading) {
     return (
       <div>
-        <div>Loading...</div>
         <Button
           size="large"
           type="primary"
@@ -176,14 +174,25 @@ function ManageWaves() {
     <Layout style={styles.layout}>
       {waveData?.map((wave) => (
         <div key={wave.id} style={styles.input}>
-          <Button
-            size="large"
-            type="primary"
-            style={styles.button}
-            onClick={() => askContractToBurn(wave.id)}
-          >
-            🐕 recover wave {wave.id} at {wave.owner} 🏃
-          </Button>
+          {isRecovering === true ? (
+            <Button
+              size="large"
+              type="primary"
+              style={styles.button}
+              onClick={null}
+            >
+              🐕 🏃 recovering wave... 💨
+            </Button>
+          ) : (
+            <Button
+              size="large"
+              type="primary"
+              style={styles.button}
+              onClick={() => askContractToBurn(wave.id)}
+            >
+              🐕 recover wave {wave.id} at {wave.owner} 🏃
+            </Button>
+          )}
         </div>
       ))}
     </Layout>

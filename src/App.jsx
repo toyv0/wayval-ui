@@ -85,7 +85,7 @@ const App = () => {
                     <MintWave />
                   </div>
                 ) : (
-                  <div>connect wallet first</div>
+                  <div>↗ connect wallet to get started ↗</div>
                 )}
               </div>
             </Route>
