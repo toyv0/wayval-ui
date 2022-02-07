@@ -5,7 +5,7 @@ import Chains from "components/Chains";
 import { Layout, Button } from "antd";
 import "antd/dist/antd.css";
 import "./style.css";
-import logo from "./images/wve.jpg";
+import logo from "./images/wayval-logo-circle.png";
 import MintWave from "components/MintWave";
 import {
   BrowserRouter as Router,
