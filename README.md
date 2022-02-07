@@ -14,3 +14,5 @@ link to add testnet (see add to metamask at bottom of page): https://mumbai.poly
 get some test matic here: https://faucet.polygon.technology/
 
 Try it out! Mint a wave to a wallet and recover it. You will get prompts to checkout the transactions as they complete on polygonscan. 
+
+Any questions? Feel free to reach out to me on twitter @_toyvo. 
