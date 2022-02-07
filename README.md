@@ -6,7 +6,7 @@ this is the frontend repository that interacts with the Wave contract.
 contract repo: https://github.com/toyv0/wayval-contract
 contract deployed on mumbai testnet here: https://mumbai.polygonscan.com/address/0xA36210fA6072b9E4FB6b906C48D40cE8213F1bb7#code
 
-to run locally: clone repo ➡️ "yarn install" ➡️ "yarn start"
+to run locally: clone repo ➡️ "yarn install" ➡️ "yarn start" (make sure to add the contract address to a .env file and name the variable REACT_APP_WAVE_CONTRACT. Or you can just replace the 3 instances of REACT_APP_WAVE_CONTRACT with 0xA36210fA6072b9E4FB6b906C48D40cE8213F1bb7 
 
 to interact with the wave contract make sure you have the mumbai testnet network setup in your wallet and have some test matic in your wallet(s)
 
